@@ -4,7 +4,7 @@ from scraper.exceptions import MenuNotFoundError, MenuBodyNotFoundError
 from datetime import date
 
 enm_page_url = "https://eatandmeet.sk/"
-ff_page_url = "https://www.freefood.sk/menu/#fiit-food"
+ff_page_url = "http://www.freefood.sk/menu/#fiit-food"
 druzba_page_url = "https://www.druzbacatering.sk/jedalny-listok/"
 meal_names, main_prices, secondary_prices, allergens, meal_categories = [], [], [], [], []
 
@@ -51,6 +51,26 @@ def enm_scrap():
 def ff_scrap():
     date_today = date.today()
     formatted_date = date_today.strftime("%d.%m.%Y")
-    print("Dnešný dátum:", formatted_date)
-    return
+    formatted_date = "22.8.2025"
+
+    html_response = requests.get(ff_page_url)
+    soup = BeautifulSoup(html_response.text, 'html.parser')
+
+    ff_part = soup.find("div", id="fiit-food")
+
+    today_menu = ff_part.find(text=lambda t:formatted_date in t)
+    #today_menu_div = soup.find("ul", class_="day-offer")
+
+    if today_menu:
+        parent_div = today_menu.find_parent("span", class_="day-title")
+
+        menu_list = parent_div.find_next_sibling("ul")
+
+        #if menu_list:
+            # vyparsuje všetky <li> prvky
+            
+            #items = [li.get_text(strip=True) for li in menu_list.find_all("li")]
+            #return items
+
+    return menu_list
 #def druzba_scrap():

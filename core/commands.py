@@ -1,7 +1,7 @@
 from discord.ext import commands
 from datetime import datetime
 from scraper.scraper import enm_scrap
-from scraper.scraper import ff_page_url
+from scraper.scraper import ff_scrap
 from utils.config import load_config
 from discord.ext.commands import Bot
 from utils.emoji_map import title_emoji_mapper
@@ -27,9 +27,9 @@ async def daily_menu(bot: Bot):
 async def send_daily_menu(config, channel, guild_id):
     try:
         # Premazanie správ pred poslaním novej spŕavy
-        await channel.purge(limit=10)
+        #await channel.purge(limit=10)
         meal_names, main_prices, secondary_prices, allergens, meal_categories = enm_scrap()
-        ff_page_url()
+        #ff_scrap()
         
         embed_color = config.get(str(guild_id), {}).get("embed_color", 0xffe28a)
 
@@ -90,7 +90,7 @@ async def send_daily_menu(config, channel, guild_id):
 def use_commands(bot):
     # Ping príkaz
     @bot.command()
-    async def ping(ctx):
+    async def ping1(ctx):
         guild_id = str(ctx.guild.id)
         config = load_config()
 
@@ -114,7 +114,7 @@ def use_commands(bot):
             await ctx.send("Rola s týmto ID neexistuje na serveri.")
 
     @bot.command()
-    async def info(ctx):
+    async def info1(ctx):
         info_embed = discord.Embed(
         title="ℹ️ Info",
         description=(
@@ -126,7 +126,7 @@ def use_commands(bot):
 
     # Príkaz na testovanie posielania obrázku
     @bot.command()
-    async def testimage(ctx):
+    async def testimage1(ctx):
         url = "https://htmlcolorcodes.com/assets/images/colors/baby-blue-color-solid-background-1920x1080.png"
         embed = discord.Embed(title="Test obrázok")
         embed.set_image(url=url)
@@ -135,7 +135,7 @@ def use_commands(bot):
     # Príkaz na manuálne posielanie denného menu
     @bot.command()
     @commands.has_permissions(manage_messages=True)
-    async def eat(ctx):
+    async def eat1(ctx):
         config = load_config()
         guild_id = str(ctx.guild.id)
 
@@ -150,3 +150,23 @@ def use_commands(bot):
             return
 
         await send_daily_menu(config, ctx.channel, ctx.guild.id)
+
+    @bot.command()
+    @commands.has_permissions(manage_messages=True)
+    async def ffeat1(ctx):
+        config = load_config()
+        guild_id = str(ctx.guild.id)
+
+        if guild_id not in config or "channel_id" not in config[guild_id]:
+            #await ctx.send("Pre tento server nie je nastavený kanál pre denné menu.")
+            return
+        
+        expected_channel_id = config[guild_id]["channel_id"]
+
+        if ctx.channel.id != expected_channel_id:
+            #await ctx.send("Tento príkaz je možné použiť iba v kanáli určenom pre denné menu.")
+            return
+        
+        info = ff_scrap()
+
+        await ctx.send(info)
