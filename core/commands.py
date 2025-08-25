@@ -36,19 +36,6 @@ async def send_daily_menu(config, channel, guild_id):
         # Získanie dnešného dátumu
         # current_date = datetime.today().strftime("%-d. %-m. %Y")
         embed_list = []
-      
-        
-        # # Úvodná správa
-        # kokotina = "Dnešné menu: "
-        # menu = f"**{current_date} **{kokotina:<130}"
-        
-        # start_embed = discord.Embed(
-        #     title=f"{menu}",
-        #     #title=f"**{current_date} : Dnešné menu 😋**",
-        #     #description=f"{current_date}",
-        #     color=embed_color
-        # )
-        # embed_list.append(start_embed)
 
         # Správy o jednotlivých jedlách
         for i in range(len(meal_names)):
@@ -90,7 +77,7 @@ async def send_daily_menu(config, channel, guild_id):
 def use_commands(bot):
     # Ping príkaz
     @bot.command()
-    async def ping1(ctx):
+    async def ping(ctx):
         guild_id = str(ctx.guild.id)
         config = load_config()
 
@@ -114,7 +101,7 @@ def use_commands(bot):
             await ctx.send("Rola s týmto ID neexistuje na serveri.")
 
     @bot.command()
-    async def info1(ctx):
+    async def info(ctx):
         info_embed = discord.Embed(
         title="ℹ️ Info",
         description=(
@@ -126,7 +113,7 @@ def use_commands(bot):
 
     # Príkaz na testovanie posielania obrázku
     @bot.command()
-    async def testimage1(ctx):
+    async def testimage(ctx):
         url = "https://htmlcolorcodes.com/assets/images/colors/baby-blue-color-solid-background-1920x1080.png"
         embed = discord.Embed(title="Test obrázok")
         embed.set_image(url=url)
@@ -135,7 +122,7 @@ def use_commands(bot):
     # Príkaz na manuálne posielanie denného menu
     @bot.command()
     @commands.has_permissions(manage_messages=True)
-    async def eat1(ctx):
+    async def eat(ctx):
         config = load_config()
         guild_id = str(ctx.guild.id)
 
@@ -153,7 +140,7 @@ def use_commands(bot):
 
     @bot.command()
     @commands.has_permissions(manage_messages=True)
-    async def ffeat1(ctx):
+    async def ffeat(ctx):
         config = load_config()
         guild_id = str(ctx.guild.id)
 
